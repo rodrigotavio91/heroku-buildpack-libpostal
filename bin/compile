@@ -1,23 +1,30 @@
 #!/usr/bin/env bash
+# bin/compile <build-dir> <cache-dir> <env-dir>
 
-set -e
+### Configure environment
 
-build=$1
-cache=$2
-env_dir=$3
+set -o errexit    # always exit on error
+set -o pipefail   # don't ignore exit codes when piping output
+unset GIT_DIR     # Avoid GIT_DIR leak from previous build steps
 
-mkdir -p $build
-mkdir -p $cache
+### Configure directories
 
-cd $cache
+BUILD_DIR=${1:-}
+CACHE_DIR=${2:-}
+ENV_DIR=${3:-}
+
+mkdir -p "${BUILD_DIR}"
+mkdir -p "${CACHE_DIR}"
+
+cd "${CACHE_DIR}"
 
 export_env_dir() {
-  whitelist_regex=${2:-'LIBPOSTAL_S3_BUCKET'}
-  blacklist_regex=${3:-'^(PATH|GIT_DIR|CPATH|CPPATH|LD_PRELOAD|LIBRARY_PATH)$'}
-  if [ -d "$env_dir" ]; then
-    for e in $(ls $env_dir); do
-      echo "$e" | grep -E "$whitelist_regex" | grep -qvE "$blacklist_regex" &&
-      export "$e=$(cat $env_dir/$e)"
+  WHITELIST_REGEX=${2:-'LIBPOSTAL_S3_BUCKET'}
+  BLACKLIST_REGEX=${3:-'^(PATH|GIT_DIR|CPATH|CPPATH|LD_PRELOAD|LIBRARY_PATH)$'}
+  if [ -d "${ENV_DIR}" ]; then
+    for e in $(ls ${ENV_DIR}); do
+      echo "$e" | grep -E "${WHITELIST_REGEX}" | grep -qvE "${BLACKLIST_REGEX}" &&
+      export "$e=$(cat ${ENV_DIR}/$e)"
       :
     done
   fi
@@ -34,28 +41,28 @@ echo "-----> Downloading libpostal"
 git clone https://github.com/openvenues/libpostal --depth 1
 cd libpostal/
 ./bootstrap.sh
-LDFLAGS="-L$build/libpostal/lib" CFLAGS="-I$build/libpostal/include" PKG_CONFIG_PATH="$build/libpostal/lib/pkgconfig"
+LDFLAGS="-L${BUILD_DIR}/libpostal/lib" CFLAGS="-I${BUILD_DIR}/libpostal/include" PKG_CONFIG_PATH="${BUILD_DIR}/libpostal/lib/pkgconfig"
 ./configure  --enable-fast-install --disable-data-download --prefix=/app/libpostal --datadir=/app/libpostal/data
 
 make
 make install
 
 # remove unused directories
-rm -rf $cache
+rm -rf "${CACHE_DIR}"
 
-mkdir -p $build/libpostal/data/compressed_data
+mkdir -p "${BUILD_DIR}/libpostal/data/compressed_data"
 
-mv /app/libpostal/* $build/libpostal
+mv /app/libpostal/* "${BUILD_DIR}/libpostal"
 
 echo "Retrieving libpostal compressed data files and storing them internally" | indent
 
 # Only retrieves a portion of Libpostal's data, the rest is loaded post slug compilation.
-curl -L --silent "${LIBPOSTAL_S3_BUCKET}/libpostal.tar.gz" --output "$build/libpostal/data/compressed_data/libpostal.tar.gz"
+curl -L --silent "${LIBPOSTAL_S3_BUCKET}/libpostal.tar.gz" --output "${BUILD_DIR}/libpostal/data/compressed_data/libpostal.tar.gz"
 
 echo "Building libpostal symbolic links" | indent
 
-mkdir -p $build/vendor/ruby-2.5.5/include
-mkdir -p $build/vendor/ruby-2.5.5/lib
+mkdir -p "${BUILD_DIR}/vendor/ruby-2.5.5/include"
+mkdir -p "${BUILD_DIR}/vendor/ruby-2.5.5/lib"
 
-ln -vs $build/libpostal/include/* $build/vendor/ruby-2.5.5/include/
-ln -vs $build/libpostal/lib/* $build/vendor/ruby-2.5.5/lib/
+ln -vs "${BUILD_DIR}/libpostal/include/*" "${BUILD_DIR}/vendor/ruby-2.5.5/include/"
+ln -vs "${BUILD_DIR}/libpostal/lib/*" "${BUILD_DIR}/vendor/ruby-2.5.5/lib/"
