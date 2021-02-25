@@ -19,11 +19,11 @@ mkdir -p "${CACHE_DIR}"
 cd "${CACHE_DIR}"
 
 export_env_dir() {
-  WHITELIST_REGEX=${2:-'LIBPOSTAL_S3_BUCKET'}
-  BLACKLIST_REGEX=${3:-'^(PATH|GIT_DIR|CPATH|CPPATH|LD_PRELOAD|LIBRARY_PATH)$'}
+  ALLOWLIST_REGEX=${2:-'LIBPOSTAL_S3_BUCKET'}
+  DENYLIST_REGEX=${3:-'^(PATH|GIT_DIR|CPATH|CPPATH|LD_PRELOAD|LIBRARY_PATH)$'}
   if [ -d "${ENV_DIR}" ]; then
     for e in $(ls ${ENV_DIR}); do
-      echo "$e" | grep -E "${WHITELIST_REGEX}" | grep -qvE "${BLACKLIST_REGEX}" &&
+      echo "$e" | grep -E "${ALLOWLIST_REGEX}" | grep -qvE "${DENYLIST_REGEX}" &&
       export "$e=$(cat ${ENV_DIR}/$e)"
       :
     done
