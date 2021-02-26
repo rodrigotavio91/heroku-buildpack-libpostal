@@ -13,17 +13,16 @@ BUILD_DIR=${1:-}
 CACHE_DIR=${2:-}
 ENV_DIR=${3:-}
 
-mkdir -p "${BUILD_DIR}"
-mkdir -p "${CACHE_DIR}"
+mkdir -p "${BUILD_DIR}/libpostal"
 
-cd "${CACHE_DIR}"
+cd "${BUILD_DIR}/libpostal"
 
-echo "-----> Downloading libpostal"
+echo "-----> Downloading libpostal in ${BUILD_DIR}/libpostal"
 
 git clone https://github.com/openvenues/libpostal
 cd libpostal
 ./bootstrap.sh
-./configure --datadir="${CACHE_DIR}"
+./configure --datadir="${BUILD_DIR}/libpostal"
 
 make
 make install
