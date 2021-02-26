@@ -18,33 +18,12 @@ mkdir -p "${CACHE_DIR}"
 
 cd "${CACHE_DIR}"
 
-indent() {
-  sed -u 's/^/       /'
-}
-
 echo "-----> Downloading libpostal"
 
-git clone https://github.com/openvenues/libpostal --depth 1
-cd libpostal/
+git clone https://github.com/openvenues/libpostal
+cd libpostal
 ./bootstrap.sh
-LDFLAGS="-L${BUILD_DIR}/libpostal/lib" CFLAGS="-I${BUILD_DIR}/libpostal/include" PKG_CONFIG_PATH="${BUILD_DIR}/libpostal/lib/pkgconfig"
-./configure  --enable-fast-install --disable-data-download --prefix=/app/libpostal --datadir=/app/libpostal/data
+./configure --datadir="${CACHE_DIR}"
 
 make
 make install
-ldconfig
-
-# remove unused directories
-rm -rf "${CACHE_DIR}"
-
-mkdir -p "${BUILD_DIR}/libpostal/data/compressed_data"
-
-mv /app/libpostal/* "${BUILD_DIR}/libpostal"
-
-echo "Building libpostal symbolic links" | indent
-
-mkdir -p "${BUILD_DIR}/vendor/ruby-2.5.5/include"
-mkdir -p "${BUILD_DIR}/vendor/ruby-2.5.5/lib"
-
-ln -vs "${BUILD_DIR}/libpostal/include/*" "${BUILD_DIR}/vendor/ruby-2.5.5/include/"
-ln -vs "${BUILD_DIR}/libpostal/lib/*" "${BUILD_DIR}/vendor/ruby-2.5.5/lib/"
