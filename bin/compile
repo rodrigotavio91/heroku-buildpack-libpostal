@@ -27,7 +27,17 @@ cd libpostal/
 LDFLAGS="-L${BUILD_DIR}/libpostal/lib" CFLAGS="-I${BUILD_DIR}/libpostal/include" PKG_CONFIG_PATH="${BUILD_DIR}/libpostal/lib/pkgconfig"
 ./configure  --enable-fast-install --disable-data-download --prefix=/app/libpostal --datadir=/app/libpostal/data
 
+echo "-----> libpostal make"
 make
 make install
 
-mv /app/libpostal "${BUILD_DIR}"
+echo "-----> libpostal mv to ${BUILD_DIR}/libpostal"
+mv /app/libpostal/* "${BUILD_DIR}/libpostal"
+
+mkdir -p "${BUILD_DIR}/vendor/ruby-2.5.5/include"
+mkdir -p "${BUILD_DIR}/vendor/ruby-2.5.5/lib"
+
+echo "-----> libpostal symlink"
+ln -vs "${BUILD_DIR}/libpostal/include/*" "${BUILD_DIR}/vendor/ruby-2.5.5/include"
+ln -vs "${BUILD_DIR}/libpostal/lib/*" "${BUILD_DIR}/vendor/ruby-2.5.5/lib"
+
