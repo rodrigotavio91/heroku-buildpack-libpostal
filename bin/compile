@@ -31,9 +31,12 @@ echo "-----> libpostal make"
 make
 make install
 
-mkdir -p /app/vendor/ruby-2.5.5/include
-mkdir -p /app/vendor/ruby-2.5.5/lib
+echo "-----> libpostal mv to ${BUILD_DIR}/libpostal"
+mkdir -p "${BUILD_DIR}/libpostal"
+mv /app/libpostal/* "${BUILD_DIR}/libpostal"
 
-echo "-----> libpostal copy"
-cp -a /app/libpostal/include/. /app/vendor/ruby-2.5.5/include
-cp -a /app/libpostal/lib/. /app/vendor/ruby-2.5.5/lib
+mkdir -p "${BUILD_DIR}/vendor/ruby-2.5.5/include"
+mkdir -p "${BUILD_DIR}/vendor/ruby-2.5.5/lib"
+
+cp -a /app/libpostal/include/* "${BUILD_DIR}/vendor/ruby-2.5.5/include"
+cp -a /app/libpostal/lib/* "${BUILD_DIR}/vendor/ruby-2.5.5/lib"
