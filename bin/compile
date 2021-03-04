@@ -35,10 +35,9 @@ echo "-----> libpostal mv to ${BUILD_DIR}/libpostal"
 mkdir -p "${BUILD_DIR}/libpostal"
 mv /app/libpostal/* "${BUILD_DIR}/libpostal"
 
-mkdir -p "${BUILD_DIR}/vendor/ruby-2.5.5/include"
-mkdir -p "${BUILD_DIR}/vendor/ruby-2.5.5/lib"
+mkdir -p /app/vendor/ruby-2.5.5/include
+mkdir -p /app/vendor/ruby-2.5.5/lib
 
-echo "-----> libpostal symlink"
-ln -vs "${BUILD_DIR}/libpostal/include/*" "${BUILD_DIR}/vendor/ruby-2.5.5/include"
-ln -vs "${BUILD_DIR}/libpostal/lib/*" "${BUILD_DIR}/vendor/ruby-2.5.5/lib"
-
+echo "-----> libpostal copy"
+cp -a /app/libpostal/include/. /app/vendor/ruby-2.5.5/include
+cp -a /app/libpostal/lib/. /app/vendor/ruby-2.5.5/lib
