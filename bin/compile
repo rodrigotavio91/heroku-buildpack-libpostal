@@ -38,5 +38,5 @@ mv /app/libpostal/* "${BUILD_DIR}/libpostal"
 mkdir -p "${BUILD_DIR}/vendor/ruby-2.5.5/include"
 mkdir -p "${BUILD_DIR}/vendor/ruby-2.5.5/lib"
 
-cp -a /app/libpostal/include/* "${BUILD_DIR}/vendor/ruby-2.5.5/include"
-cp -a /app/libpostal/lib/* "${BUILD_DIR}/vendor/ruby-2.5.5/lib"
+cp -a "${BUILD_DIR}/libpostal/include/*" "${BUILD_DIR}/vendor/ruby-2.5.5/include"
+cp -a "${BUILD_DIR}/libpostal/lib/*" "${BUILD_DIR}/vendor/ruby-2.5.5/lib"
