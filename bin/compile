@@ -25,7 +25,7 @@ git clone https://github.com/openvenues/libpostal
 cd libpostal/
 ./bootstrap.sh
 LDFLAGS="-L${BUILD_DIR}/libpostal/lib" CFLAGS="-I${BUILD_DIR}/libpostal/include" PKG_CONFIG_PATH="${BUILD_DIR}/libpostal/lib/pkgconfig"
-./configure  --enable-fast-install --disable-data-download --prefix=/app/libpostal --datadir=/app/libpostal/data
+./configure  --enable-fast-install --prefix=/app/libpostal --datadir=/app/libpostal/data
 
 echo "-----> libpostal make"
 make
