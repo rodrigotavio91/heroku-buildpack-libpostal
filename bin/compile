@@ -38,5 +38,10 @@ mv /app/libpostal/* "${BUILD_DIR}/libpostal"
 mkdir -p "${BUILD_DIR}/vendor/ruby-2.7.1/include"
 mkdir -p "${BUILD_DIR}/vendor/ruby-2.7.1/lib"
 
-ln -vs "${BUILD_DIR}/libpostal/include/*" "${BUILD_DIR}/vendor/ruby-2.7.1/include/"
-ln -vs "${BUILD_DIR}/libpostal/lib/*" "${BUILD_DIR}/vendor/ruby-2.7.1/lib/"
+cp -avr "${BUILD_DIR}/libpostal/include/." "${BUILD_DIR}/vendor/ruby-2.7.1/include/"
+cp -avr "${BUILD_DIR}/libpostal/lib/." "${BUILD_DIR}/vendor/ruby-2.7.1/lib/"
+
+### Clean up data
+echo "-----> cleaning up data in original ${BUILD_DIR}/libpostal"
+rm -rf "${BUILD_DIR}/libpostal/include"
+rm -rf "${BUILD_DIR}/libpostal/lib"
