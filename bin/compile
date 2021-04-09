@@ -35,7 +35,6 @@ LDFLAGS="-L${BUILD_DIR}/libpostal/lib" CFLAGS="-I${BUILD_DIR}/libpostal/include"
 echo "-----> libpostal make"
 make
 make install
-ldconfig
 
 echo "-----> libpostal mv to ${BUILD_DIR}/libpostal"
 mkdir -p "${BUILD_DIR}/libpostal"
