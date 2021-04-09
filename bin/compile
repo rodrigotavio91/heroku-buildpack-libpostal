@@ -21,6 +21,9 @@ cd "${CACHE_DIR}"
 echo "-----> Downloading libpostal in ${CACHE_DIR}/libpostal"
 echo "-----> build dir is ${BUILD_DIR}"
 
+### Remove folder if exists (if cache'd from previous run)
+rm -rf /libpostal
+
 git clone https://github.com/openvenues/libpostal
 cd libpostal/
 ./bootstrap.sh
