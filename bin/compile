@@ -40,8 +40,8 @@ echo "-----> libpostal mv to ${BUILD_DIR}/libpostal"
 mkdir -p "${BUILD_DIR}/libpostal"
 mv /app/libpostal/* "${BUILD_DIR}/libpostal"
 
-mkdir -p "${BUILD_DIR}/vendor/ruby-2.7.7/include"
-mkdir -p "${BUILD_DIR}/vendor/ruby-2.7.7/lib"
+mkdir -p "${BUILD_DIR}/vendor/ruby-2.7.0/include"
+mkdir -p "${BUILD_DIR}/vendor/ruby-2.7.0/lib"
 
-cp -avr "${BUILD_DIR}/libpostal/include/." "${BUILD_DIR}/vendor/ruby-2.7.7/include/"
-cp -avr "${BUILD_DIR}/libpostal/lib/." "${BUILD_DIR}/vendor/ruby-2.7.7/lib/"
+cp -avr "${BUILD_DIR}/libpostal/include/." "${BUILD_DIR}/vendor/ruby-2.7.0/include/"
+cp -avr "${BUILD_DIR}/libpostal/lib/." "${BUILD_DIR}/vendor/ruby-2.7.0/lib/"
